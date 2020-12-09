@@ -92,7 +92,7 @@ class ExampleSwitch13(app_manager.RyuApp):
     ############################
     #######new function#########
     ############################
-    @set_ev_cls(ofp_event.EventOFPStateChange, [MAIN_DISPATCHER, DEAD_DISPATCHER])
+    @set_ev_cls(ofp_event.EventOFPStateChange, [MAIN_DISPATCHER])
     def state_change_handler(self, ev):
         datapath = ev.datapath
         if ev.state == MAIN_DISPATCHER:
@@ -100,10 +100,7 @@ class ExampleSwitch13(app_manager.RyuApp):
                 print('register datapath: ', datapath.id)
             self.datapaths[datapath.id] = datapath
 
-        elif ev.state == DEAD_DISPATCHER:
-            if datapath.id in self.datapaths:
-                print('unregister datapath:', datapath.id)
-                del self.datapaths[datapath.id]
+       
 
     def monitor(self):
         while True:
