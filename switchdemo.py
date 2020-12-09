@@ -107,9 +107,9 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
     def monitor(self):
         while True:
             for dp in self.datapaths.values():
-                print('collect data ')
+                print('collecting data')
                 self.request_stats(dp)
-            hub.sleep(10)
+            hub.sleep(1)
 
     def request_stats(self, datapath):
         self.logger.debug('send stats request: %016x', datapath.id)
