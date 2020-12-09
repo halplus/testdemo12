@@ -131,23 +131,12 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
         #self.logger.info('---------------- -------- ----------------- -------- -------- --------')
         for stat in sorted([flow for flow in body if (flow.priority == 1)], key=lambda flow:
         (flow.match['in_port'], flow.match['eth_dst'])):
-<<<<<<< HEAD
             #print("\n" + str(ev.msg.datapath.id) + "," + str(stat.match['in_port']) + "," +
                       # str(stat.match['eth_dst']) + "," + str(stat.packet_count) + "," + str(stat.byte_count))
-            with open("flowdata1.txt", "a") as myfile:
-                myfile.write("\n{},{},{},{},{},{}".format(stat.match['in_port'], stat.packet_count,
-                                                          stat.byte_count, stat.duration_sec,stat.idle_timeout,stat.hard_timeout)
+            with open("flowdata.txt", "a") as myfile:
 
-                #myfile.write("\n"  + str(stat.match['in_port']) + "," +
-                        #+ str(stat.packet_count) + "," + str(stat.byte_count)+","+str(stat.duration_sec))
-=======
-
-            print("\n" + str(ev.msg.datapath.id) + "," + str(stat.match['in_port']) + "," +
-                       str(stat.match['eth_dst']) + "," + str(stat.packet_count) + "," + str(stat.byte_count))
-            with open("test.txt", "a") as myfile:
                 myfile.write("\n"  + str(stat.match['in_port']) + "," +
-                        + str(stat.packet_count) + "," + str(stat.byte_count),+"," +str(stat.duration_sec)+"," +str(stat.idle_timeout)+"," +str(stat.hard_timeout))
->>>>>>> parent of 72d30db... 1
+                        + str(stat.packet_count) + "," + str(stat.byte_count))
 
     @set_ev_cls(ofp_event.EventOFPPortStatsReply, MAIN_DISPATCHER)
     def _port_stats_reply_handler(self, ev):
@@ -159,15 +148,8 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
 
                 #self.logger.info('%016x %8x %8d %8d %8d %8d %8d %8d',ev.msg.datapath.id, stat.port_no,stat.rx_packets, stat.rx_bytes, stat.rx_errors,stat.tx_packets, stat.tx_bytes, stat.tx_errors)
 
-<<<<<<< HEAD
-                #print("\n{},{},{},{},{},{}".format(ev.msg.datapath.id, stat.port_no, stat.rx_bytes,
-                                                        #stat.rx_packets, stat.tx_bytes, stat.tx_packets))
-                with open("Portdata1.txt", "a") as myfile:
-                    myfile.write("\n{},{},{},{},{},{}".format(stat.port_no, stat.rx_bytes,
-=======
                 print("\n{},{},{},{},{},{}".format(ev.msg.datapath.id, stat.port_no, stat.rx_bytes,
                                                         stat.rx_packets, stat.tx_bytes, stat.tx_packets))
-                with open("test.txt", "a") as myfile:
-                    myfile.write("\n{},{},{},{},{},{}".format( stat.port_no, stat.rx_bytes,
->>>>>>> parent of 72d30db... 1
+                with open("Portdata.txt", "a") as myfile:
+                    myfile.write("\n{},{},{},{},{},{}".format(stat.port_no, stat.rx_bytes,
                                                         stat.rx_packets, stat.tx_bytes, stat.tx_packets,stat.duration_sec))
