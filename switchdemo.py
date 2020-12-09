@@ -115,11 +115,9 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
         self.logger.debug('send stats request: %016x', datapath.id)
         ofproto = datapath.ofproto
         parser = datapath.ofproto_parser
-
         # To collect dp_id, pkt_count, byte_count
         req = parser.OFPFlowStatsRequest(datapath)
         datapath.send_msg(req)
-
         # To collect dp_id, port_no, rx_bytes, rx_pkts, tx_bytes, tx_pkts
         req = parser.OFPPortStatsRequest(datapath, 0, ofproto.OFPP_ANY)
         datapath.send_msg(req)
@@ -133,8 +131,8 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
         (flow.match['in_port'], flow.match['eth_dst'])):
             #print("\n" + str(ev.msg.datapath.id) + "," + str(stat.match['in_port']) + "," +
                       # str(stat.match['eth_dst']) + "," + str(stat.packet_count) + "," + str(stat.byte_count))
-            with open("flowdata.txt", "a") as myfile:
-                myfile.write("\n" + str(stat.duration_sec) + "," + str(stat.match['in_port']) + "," +
+            with open("flowdataYOUTUBE.txt", "a") as myfile:
+                myfile.write("\n" + str(stat.match['in_port']) + "," + str(stat.duration_sec) + "," +
                              str(stat.idle_timeout) + "," + str(stat.packet_count) + "," + str(stat.byte_count))
 
 
@@ -150,6 +148,6 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
 
                 print("\n{},{},{},{},{},{}".format(ev.msg.datapath.id, stat.port_no, stat.rx_bytes,
                                                         stat.rx_packets, stat.tx_bytes, stat.tx_packets))
-                with open("Portdata.txt", "a") as myfile:
-                    myfile.write("\n{},{},{},{},{},{}".format(stat.port_no, stat.rx_bytes,
-                                                        stat.rx_packets, stat.tx_bytes, stat.tx_packets,stat.duration_sec))
+                with open("portdataYOUTUBE.txt", "a") as myfile:
+                    myfile.write("\n{},{},{},{},{},{}".format(stat.port_no,stat.duration_sec,stat.rx_bytes,
+                                                        stat.rx_packets, stat.tx_bytes, stat.tx_packets))
