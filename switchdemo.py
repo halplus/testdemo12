@@ -131,12 +131,11 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
         #self.logger.info('---------------- -------- ----------------- -------- -------- --------')
         for stat in sorted([flow for flow in body if (flow.priority == 1)], key=lambda flow:
         (flow.match['in_port'], flow.match['eth_dst'])):
-
             print("\n" + str(ev.msg.datapath.id) + "," + str(stat.match['in_port']) + "," +
                        str(stat.match['eth_dst']) + "," + str(stat.packet_count) + "," + str(stat.byte_count))
-            with open("test.txt", "a") as myfile:
+            with open("flowdata.txt", "a") as myfile:
                 myfile.write("\n"  + str(stat.match['in_port']) + "," +
-                        + str(stat.packet_count) + "," + str(stat.byte_count),+"," +str(stat.duration_sec)+"," +str(stat.idle_timeout)+"," +str(stat.hard_timeout))
+                        + str(stat.packet_count) + "," + str(stat.byte_count)+","+str(stat.duration_sec)+","+str(stat.idle_timeout)+"," +str(stat.hard_timeout))
 
     @set_ev_cls(ofp_event.EventOFPPortStatsReply, MAIN_DISPATCHER)
     def _port_stats_reply_handler(self, ev):
@@ -150,6 +149,6 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
 
                 print("\n{},{},{},{},{},{}".format(ev.msg.datapath.id, stat.port_no, stat.rx_bytes,
                                                         stat.rx_packets, stat.tx_bytes, stat.tx_packets))
-                with open("test.txt", "a") as myfile:
-                    myfile.write("\n{},{},{},{},{},{}".format( stat.port_no, stat.rx_bytes,
+                with open("Portdata.txt", "a") as myfile:
+                    myfile.write("\n{},{},{},{},{},{}".format(stat.port_no, stat.rx_bytes,
                                                         stat.rx_packets, stat.tx_bytes, stat.tx_packets,stat.duration_sec))
