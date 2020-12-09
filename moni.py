@@ -14,7 +14,11 @@ class ExampleSwitch13(app_manager.RyuApp):
         super(ExampleSwitch13, self).__init__(*args, **kwargs)
         # initialize mac address table.
         self.mac_to_port = {}
- 
+        #######new function#######
+        self.datapaths = {}
+        self.monitor_thread = hub.spawn(self.monitor)
+
+
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
     def switch_features_handler(self, ev):
         datapath = ev.msg.datapath
@@ -26,7 +30,7 @@ class ExampleSwitch13(app_manager.RyuApp):
         actions = [parser.OFPActionOutput(ofproto.OFPP_CONTROLLER,
                                           ofproto.OFPCML_NO_BUFFER)]
         self.add_flow(datapath, 0, match, actions)
- 
+
     def add_flow(self, datapath, priority, match, actions):
         ofproto = datapath.ofproto
         parser = datapath.ofproto_parser
@@ -84,3 +88,63 @@ class ExampleSwitch13(app_manager.RyuApp):
                                   in_port=in_port, actions=actions,
                                   data=msg.data)
         datapath.send_msg(out)
+
+    ############################
+    #######new function#########
+    ############################
+    @set_ev_cls(ofp_event.EventOFPStateChange, [MAIN_DISPATCHER, DEAD_DISPATCHER])
+    def state_change_handler(self, ev):
+        datapath = ev.datapath
+        if ev.state == MAIN_DISPATCHER:
+            if datapath.id not in self.datapaths:
+                print('register datapath: ', datapath.id)
+            self.datapaths[datapath.id] = datapath
+
+        elif ev.state == DEAD_DISPATCHER:
+            if datapath.id in self.datapaths:
+                print('unregister datapath:', datapath.id)
+                del self.datapaths[datapath.id]
+
+    def monitor(self):
+        while True:
+            for dp in self.datapaths.values():
+                print('collect data ')
+                self.request_stats(dp)
+            hub.sleep(10)
+
+    def request_stats(self, datapath):
+        self.logger.debug('send stats request: %016x', datapath.id)
+        ofproto = datapath.ofproto
+        parser = datapath.ofproto_parser
+
+        # To collect dp_id, pkt_count, byte_count
+        req = parser.OFPFlowStatsRequest(datapath)
+        datapath.send_msg(req)
+
+        # To collect dp_id, port_no, rx_bytes, rx_pkts, tx_bytes, tx_pkts
+        req = parser.OFPPortStatsRequest(datapath, 0, ofproto.OFPP_ANY)
+        datapath.send_msg(req)
+
+    @set_ev_cls(ofp_event.EventOFPFlowStatsReply, MAIN_DISPATCHER)
+    def _flow_stats_reply_handler(self, ev):
+        body = ev.msg.body
+        self.logger.info('datapath         in-port  eth-dst           out-port packets  bytes')
+        self.logger.info('---------------- -------- ----------------- -------- -------- --------')
+        for stat in sorted([flow for flow in body if (flow.priority == 1)], key=lambda flow:
+        (flow.match['in_port'], flow.match['eth_dst'])):
+            print("\n" + str(ev.msg.datapath.id) + "," + str(stat.match['in_port']) + "," +
+                       str(stat.match['eth_dst']) + "," + str(stat.packet_count) + "," + str(stat.byte_count))
+
+    @set_ev_cls(ofp_event.EventOFPPortStatsReply, MAIN_DISPATCHER)
+    def _port_stats_reply_handler(self, ev):
+        body = ev.msg.body
+        self.logger.info('datapath         port     rx-pkts  rx-bytes rx-error tx-pkts  tx-bytes tx-error')
+        self.logger.info('---------------- -------- -------- -------- -------- -------- -------- --------')
+        for stat in sorted(body, key=attrgetter('port_no')):
+            if stat.port_no <= 10:
+                self.logger.info('%016x %8x %8d %8d %8d %8d %8d %8d',
+                                 ev.msg.datapath.id, stat.port_no,
+                                 stat.rx_packets, stat.rx_bytes, stat.rx_errors,
+                                 stat.tx_packets, stat.tx_bytes, stat.tx_errors)
+                print("\n{},{},{},{},{},{}".format(ev.msg.datapath.id, stat.port_no, stat.rx_bytes,
+                                                        stat.rx_packets, stat.tx_bytes, stat.tx_packets))
