@@ -135,8 +135,8 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
             print("\n" + str(ev.msg.datapath.id) + "," + str(stat.match['in_port']) + "," +
                        str(stat.match['eth_dst']) + "," + str(stat.packet_count) + "," + str(stat.byte_count))
             with open("test.txt", "a") as myfile:
-                myfile.write("\n" + str(ev.msg.datapath.id) + "," + str(stat.match['in_port']) + "," +
-                       str(stat.match['eth_dst']) + "," + str(stat.packet_count) + "," + str(stat.byte_count))
+                myfile.write("\n"  + str(stat.match['in_port']) + "," +
+                        + str(stat.packet_count) + "," + str(stat.byte_count),+"," +str(stat.duration_sec)+"," +str(stat.idle_timeout)+"," +str(stat.hard_timeout))
 
     @set_ev_cls(ofp_event.EventOFPPortStatsReply, MAIN_DISPATCHER)
     def _port_stats_reply_handler(self, ev):
@@ -151,5 +151,5 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
                 print("\n{},{},{},{},{},{}".format(ev.msg.datapath.id, stat.port_no, stat.rx_bytes,
                                                         stat.rx_packets, stat.tx_bytes, stat.tx_packets))
                 with open("test.txt", "a") as myfile:
-                    myfile.write("\n{},{},{},{},{},{}".format(ev.msg.datapath.id, stat.port_no, stat.rx_bytes,
-                                                        stat.rx_packets, stat.tx_bytes, stat.tx_packets))
+                    myfile.write("\n{},{},{},{},{},{}".format( stat.port_no, stat.rx_bytes,
+                                                        stat.rx_packets, stat.tx_bytes, stat.tx_packets,stat.duration_sec))
