@@ -127,23 +127,29 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
     @set_ev_cls(ofp_event.EventOFPFlowStatsReply, MAIN_DISPATCHER)
     def _flow_stats_reply_handler(self, ev):
         body = ev.msg.body
-        self.logger.info('datapath         in-port  eth-dst           out-port packets  bytes')
-        self.logger.info('---------------- -------- ----------------- -------- -------- --------')
+        #self.logger.info('datapath         in-port  eth-dst           out-port packets  bytes')
+        #self.logger.info('---------------- -------- ----------------- -------- -------- --------')
         for stat in sorted([flow for flow in body if (flow.priority == 1)], key=lambda flow:
         (flow.match['in_port'], flow.match['eth_dst'])):
+
             print("\n" + str(ev.msg.datapath.id) + "," + str(stat.match['in_port']) + "," +
+                       str(stat.match['eth_dst']) + "," + str(stat.packet_count) + "," + str(stat.byte_count))
+            with open("test.txt", "a") as myfile:
+                myfile.write("\n" + str(ev.msg.datapath.id) + "," + str(stat.match['in_port']) + "," +
                        str(stat.match['eth_dst']) + "," + str(stat.packet_count) + "," + str(stat.byte_count))
 
     @set_ev_cls(ofp_event.EventOFPPortStatsReply, MAIN_DISPATCHER)
     def _port_stats_reply_handler(self, ev):
         body = ev.msg.body
-        self.logger.info('datapath         port     rx-pkts  rx-bytes rx-error tx-pkts  tx-bytes tx-error')
-        self.logger.info('---------------- -------- -------- -------- -------- -------- -------- --------')
+        #self.logger.info('datapath         port     rx-pkts  rx-bytes rx-error tx-pkts  tx-bytes tx-error')
+        #self.logger.info('---------------- -------- -------- -------- -------- -------- -------- --------')
         for stat in sorted(body, key=attrgetter('port_no')):
             if stat.port_no <= 10:
-                self.logger.info('%016x %8x %8d %8d %8d %8d %8d %8d',
-                                 ev.msg.datapath.id, stat.port_no,
-                                 stat.rx_packets, stat.rx_bytes, stat.rx_errors,
-                                 stat.tx_packets, stat.tx_bytes, stat.tx_errors)
+
+                #self.logger.info('%016x %8x %8d %8d %8d %8d %8d %8d',ev.msg.datapath.id, stat.port_no,stat.rx_packets, stat.rx_bytes, stat.rx_errors,stat.tx_packets, stat.tx_bytes, stat.tx_errors)
+
                 print("\n{},{},{},{},{},{}".format(ev.msg.datapath.id, stat.port_no, stat.rx_bytes,
+                                                        stat.rx_packets, stat.tx_bytes, stat.tx_packets))
+                with open("test.txt", "a") as myfile:
+                    myfile.write("\n{},{},{},{},{},{}".format(ev.msg.datapath.id, stat.port_no, stat.rx_bytes,
                                                         stat.rx_packets, stat.tx_bytes, stat.tx_packets))
