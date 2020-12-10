@@ -1,5 +1,8 @@
 import joblib
 import numpy as np
+import time
+
+
 
 def getBelowData_forbuildingX(originX, windows):
     singleList = []
@@ -42,7 +45,8 @@ windowsOfSize = 15
 RF = joblib.load('RF.model')
 
 while 1==1:
-    sleep(5)
+    time.sleep(5)
+    print('clf start')
     with open('portdataMusic.txt', 'r') as f:
         lines = f.read().splitlines()
         last_line = lines[-40:-1]
@@ -57,4 +61,4 @@ while 1==1:
             if apptype not in foundApp:
                 print('found application:', ApplicationList[apptype])
                 foundApp.append(apptype)
-
+    print('clf end')
