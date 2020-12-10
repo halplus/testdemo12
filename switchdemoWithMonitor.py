@@ -119,6 +119,7 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
     def clf(self):
         while True:
             hub.sleep(5)
+            print('Classifier working')
             RF = joblib.load('RF.model')
             def getBelowData_forbuildingX(originX, windows):
                 singleList = []
@@ -165,9 +166,8 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
                 foundApp = []
                 for single in predictList:
                     apptype = backToReslutWithOne(single)
-                    if apptype not in foundApp:
-                        print('found application:', ApplicationList[apptype])
-                        foundApp.append(apptype)
+                    print('found application:', ApplicationList[apptype])
+
 
     def request_stats(self, datapath):
         #self.logger.debug('send stats request: %016x', datapath.id)
