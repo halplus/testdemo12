@@ -207,7 +207,7 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
 
                 #print("\n{},{},{},{},{},{}".format(ev.msg.datapath.id, stat.port_no, stat.rx_bytes,
                                                         #stat.rx_packets, stat.tx_bytes, stat.tx_packets))
-                with open("portdataMusic.txt", "a") as myfile:
+                with open("portdataMusic.txt", "a+") as myfile:
                     #portNewLines.append(stat.port_no,stat.duration_sec,stat.rx_bytes,stat.rx_packets, stat.tx_bytes, stat.tx_packets)
                     myfile.write("\n{},{},{},{},{},{}".format(stat.port_no,stat.duration_sec,stat.rx_bytes,
                                                         stat.rx_packets, stat.tx_bytes, stat.tx_packets))
