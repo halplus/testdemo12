@@ -146,8 +146,8 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
 
                 #self.logger.info('%016x %8x %8d %8d %8d %8d %8d %8d',ev.msg.datapath.id, stat.port_no,stat.rx_packets, stat.rx_bytes, stat.rx_errors,stat.tx_packets, stat.tx_bytes, stat.tx_errors)
 
-                print("\n{},{},{},{},{},{}".format(ev.msg.datapath.id, stat.port_no, stat.rx_bytes,
-                                                        stat.rx_packets, stat.tx_bytes, stat.tx_packets))
+                #print("\n{},{},{},{},{},{}".format(ev.msg.datapath.id, stat.port_no, stat.rx_bytes,
+                                                        #stat.rx_packets, stat.tx_bytes, stat.tx_packets))
                 with open("portdataMusic.txt", "a") as myfile:
                     myfile.write("\n{},{},{},{},{},{}".format(stat.port_no,stat.duration_sec,stat.rx_bytes,
                                                         stat.rx_packets, stat.tx_bytes, stat.tx_packets))
