@@ -207,15 +207,16 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
 
                 #print("\n{},{},{},{},{},{}".format(ev.msg.datapath.id, stat.port_no, stat.rx_bytes,
                                                         #stat.rx_packets, stat.tx_bytes, stat.tx_packets))
-                with open("portdataMusic.txt", "r+") as myfile:
+                with open("portdataMusic.txt", "a") as myfile:
                     #portNewLines.append(stat.port_no,stat.duration_sec,stat.rx_bytes,stat.rx_packets, stat.tx_bytes, stat.tx_packets)
                     myfile.write("\n{},{},{},{},{},{}".format(stat.port_no,stat.duration_sec,stat.rx_bytes,
                                                         stat.rx_packets, stat.tx_bytes, stat.tx_packets))
                     copyfile("portdataMusic.txt", "forClf.txt")
-                    hub.sleep(5)
+
+                with open("forClf.txt", "r") as myfile:
+
                     print('Classifier working')
                     RF = joblib.load('RF.model')
-
                     def getBelowData_forbuildingX(originX, windows):
                         singleList = []
                         for i in range(0, originX.shape[0] - windows):
