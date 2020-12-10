@@ -9,7 +9,7 @@ from ryu.app import simple_switch_13
 from ryu.lib import hub
 from operator import attrgetter
 import numpy as np
-from sklearn.externals import joblib
+import joblib
 
  
  
