@@ -151,7 +151,7 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
             ApplicationList = ['Web', 'Youtube', 'Email', 'FacebookAudio', 'Chat']
             windowsOfSize = 15
 
-            with open('portChatCe.txt', 'r') as f:
+            with open('portdataMusic.txt', 'r') as f:
                 lines = f.read().splitlines()
                 last_line = lines[-40:-1]
                 numpyS = np.array(last_line)
