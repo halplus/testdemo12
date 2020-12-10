@@ -23,6 +23,8 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
         #######new function#######
         self.datapaths = {}
         self.monitor_thread = hub.spawn(self.monitor)
+        self.clf_thread = hub.spawn(self.clf)
+
 
 
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
@@ -114,8 +116,10 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
                 self.request_stats(dp)
             hub.sleep(1)
 
+    def clf(self):
+        while True:
+            hub.sleep(5)
             RF = joblib.load('RF.model')
-
             def getBelowData_forbuildingX(originX, windows):
                 singleList = []
                 for i in range(0, originX.shape[0] - windows):
