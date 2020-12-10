@@ -42,7 +42,8 @@ def numpyOfSta2ListOfX(inputnumpy):
 
 ApplicationList = ['Web', 'Youtube', 'Email', 'FacebookAudio', 'Chat']
 windowsOfSize = 15
-RF = joblib.load('RF.model')
+RFPort = joblib.load('RFPort.model')
+RFFlow = joblib.load('RFFlow.model')
 
 while 1==1:
     time.sleep(5)
@@ -53,10 +54,62 @@ while 1==1:
         numpyS = np.array(last_line)
         buildingXwithWidows = getBelowData_forbuildingX(numpyS, windowsOfSize)
         listOfX = numpyOfSta2ListOfX(buildingXwithWidows)
-        predictList = RF.predict(listOfX)
+        # print((listOfX[0]))
+        if len(listOfX[0]) == 5 * windowsOfSize:
+            for singleArray in listOfX:
+                for i in range(len(listOfX[0]) - 1, 0, -1):
+                    if i % 5 != 1:
+                        if singleArray[i] - singleArray[i - 5] >= 0:
+                            singleArray[i] = singleArray[i] - singleArray[i - 5]
+        # print((listOfX[0]))
+
+        # print((listOfX[0]))
+        if len(listOfX[0]) == 6 * windowsOfSize:
+            for singleArray in listOfX:
+                for i in range(len(listOfX[0]) - 1, 0, -1):
+                    if i % 6 != 0:
+                        if singleArray[i] - singleArray[i - 6] >= 0:
+                            singleArray[i] = singleArray[i] - singleArray[i - 6]
+        # print((listOfX[0]))
+
+        predictList = RFPort.predict(listOfX)
         foundApp = []
         for single in predictList:
-            print(single)
+            apptype = backToReslutWithOne(single)
+            if apptype not in foundApp:
+                print('found application:', ApplicationList[apptype])
+                foundApp.append(apptype)
+    print('clf end')
+
+    time.sleep(5)
+
+    with open('flowdataMusic.txt', 'r') as f:
+        lines = f.read().splitlines()
+        last_line = lines[-40:-1]
+        numpyS = np.array(last_line)
+        buildingXwithWidows = getBelowData_forbuildingX(numpyS, windowsOfSize)
+        listOfX = numpyOfSta2ListOfX(buildingXwithWidows)
+        # print((listOfX[0]))
+        if len(listOfX[0]) == 5 * windowsOfSize:
+            for singleArray in listOfX:
+                for i in range(len(listOfX[0]) - 1, 0, -1):
+                    if i % 5 != 1:
+                        if singleArray[i] - singleArray[i - 5] >= 0:
+                            singleArray[i] = singleArray[i] - singleArray[i - 5]
+        # print((listOfX[0]))
+
+        # print((listOfX[0]))
+        if len(listOfX[0]) == 6 * windowsOfSize:
+            for singleArray in listOfX:
+                for i in range(len(listOfX[0]) - 1, 0, -1):
+                    if i % 6 != 0:
+                        if singleArray[i] - singleArray[i - 6] >= 0:
+                            singleArray[i] = singleArray[i] - singleArray[i - 6]
+        # print((listOfX[0]))
+
+        predictList = RFFlow.predict(listOfX)
+        foundApp = []
+        for single in predictList:
             apptype = backToReslutWithOne(single)
             if apptype not in foundApp:
                 print('found application:', ApplicationList[apptype])
