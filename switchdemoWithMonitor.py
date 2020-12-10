@@ -10,8 +10,9 @@ from ryu.lib import hub
 from operator import attrgetter
 import numpy as np
 import joblib
+from shutil import copyfile
 
- 
+portNewLines=[]
  
 class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
     OFP_VERSIONS = [ofproto_v1_3.OFP_VERSION]
@@ -156,7 +157,7 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
             ApplicationList = ['Web', 'Youtube', 'Email', 'FacebookAudio', 'Chat']
             windowsOfSize = 15
 
-            with open('portdataMusic.txt', 'r') as f:
+            with open('forClf.txt', 'r') as f:
                 lines = f.read().splitlines()
                 last_line = lines[-40:-1]
                 numpyS = np.array(last_line)
@@ -207,5 +208,7 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
                 #print("\n{},{},{},{},{},{}".format(ev.msg.datapath.id, stat.port_no, stat.rx_bytes,
                                                         #stat.rx_packets, stat.tx_bytes, stat.tx_packets))
                 with open("portdataMusic.txt", "a") as myfile:
+                    #portNewLines.append(stat.port_no,stat.duration_sec,stat.rx_bytes,stat.rx_packets, stat.tx_bytes, stat.tx_packets)
                     myfile.write("\n{},{},{},{},{},{}".format(stat.port_no,stat.duration_sec,stat.rx_bytes,
                                                         stat.rx_packets, stat.tx_bytes, stat.tx_packets))
+                    copyfile("portdataMusic.txt", "forClf.txt")
