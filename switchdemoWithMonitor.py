@@ -252,7 +252,7 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
                     windowsOfSize = 15
 
 
-                    lines = myfile.read().splitlines()
+                    lines = myfile.readlines()
                     last_line = lines[-40:-1]
                     numpyS = np.array(last_line)
                     buildingXwithWidows = getBelowData_forbuildingX(numpyS, windowsOfSize)
