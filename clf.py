@@ -85,14 +85,14 @@ while 1==1:
 
     with open('flowdataMusic.txt', 'r') as f:
         lines = f.read().splitlines()
-        last_line = lines[-40:-1]
+        last_line = lines[-45:-5]
         numpyS = np.array(last_line)
         buildingXwithWidows = getBelowData_forbuildingX(numpyS, windowsOfSize)
         listOfX = numpyOfSta2ListOfX(buildingXwithWidows)
         # print((listOfX[0]))
         if len(listOfX[0]) == 5 * windowsOfSize:
             for singleArray in listOfX:
-                for i in range(len(listOfX[0]) - 1, 0, -1):
+                for i in range(len(listOfX[0]) - 1, 2, -1):
                     if i % 5 != 1:
                         if singleArray[i] - singleArray[i - 5] >= 0:
                             singleArray[i] = singleArray[i] - singleArray[i - 5]
@@ -101,7 +101,7 @@ while 1==1:
         # print((listOfX[0]))
         if len(listOfX[0]) == 6 * windowsOfSize:
             for singleArray in listOfX:
-                for i in range(len(listOfX[0]) - 1, 0, -1):
+                for i in range(len(listOfX[0]) - 1, 2, -1):
                     if i % 6 != 0:
                         if singleArray[i] - singleArray[i - 6] >= 0:
                             singleArray[i] = singleArray[i] - singleArray[i - 6]
