@@ -157,17 +157,17 @@ class ExampleSwitch13(simple_switch_13.SimpleSwitch13):
             ApplicationList = ['Web', 'Youtube', 'Email', 'FacebookAudio', 'Chat']
             windowsOfSize = 15
 
-            with open('forClf.txt', 'r') as f:
-                lines = f.read().splitlines()
-                last_line = lines[-40:-1]
-                numpyS = np.array(last_line)
-                buildingXwithWidows = getBelowData_forbuildingX(numpyS, windowsOfSize)
-                listOfX = numpyOfSta2ListOfX(buildingXwithWidows)
-                predictList = RF.predict(listOfX)
-                foundApp = []
-                for single in predictList:
-                    apptype = backToReslutWithOne(single)
-                    print('found application:', ApplicationList[apptype])
+            #with open('forClf.txt', 'r') as f:
+                #lines = f.read().splitlines()
+                #last_line = lines[-40:-1]
+                #numpyS = np.array(last_line)
+                #buildingXwithWidows = getBelowData_forbuildingX(numpyS, windowsOfSize)
+                #listOfX = numpyOfSta2ListOfX(buildingXwithWidows)
+                #predictList = RF.predict(listOfX)
+                #foundApp = []
+                #for single in predictList:
+                    #apptype = backToReslutWithOne(single)
+                    #print('found application:', ApplicationList[apptype])
 
 
     def request_stats(self, datapath):
